@@ -1,0 +1,11 @@
+check,area,issue,records_affected,records_checked,rate_pct,what_it_breaks
+01,Duplicates,Duplicate contacts,269,6819,3.9,"Double-counted leads, emails sent twice, split activity history"
+02,Duplicates,Duplicate companies,72,2472,2.9,"Two owners on one account, broken account reporting"
+03,Associations,Contacts not linked to their company,379,6819,5.6,"Missing from account views, routing and company reporting"
+04,Lifecycle,'Customer' with no purchase,57,3957,1.4,Inflated customer counts; real prospects excluded from sales
+05,Ownership,SQLs and opportunities with no owner,200,1148,17.4,Nobody accountable for follow-up
+06,Required fields,Contacts with no lead source,565,6819,8.3,Pipeline cannot be credited to a channel
+07,Routing,MQLs not contacted within 24 hours,254,371,68.5,"Slower follow-up, lower conversion"
+08,Pipeline,Stale open deals,102,222,45.9,Forecast includes pipeline nobody is working
+09,Required fields,Deals with no amount,31,465,6.7,Left out of pipeline value and forecast
+10,Routing,Product-qualified accounts with no sales owner,93,139,66.9,Expansion revenue left to chance
