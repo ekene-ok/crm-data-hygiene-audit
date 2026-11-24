@@ -8,9 +8,9 @@ A HubSpot-style CRM audit for a product-led SaaS company: ten SQL checks for dup
 
 The CRM's biggest problems are routing gaps, not dirty fields. **Most MQLs that missed the 24-hour follow-up SLA were never assigned to anyone**, and **two thirds of the busiest self-serve teams have nobody in sales talking to them**. Meanwhile, 46% of open pipeline is stale, so the forecast is overstated.
 
-![MQL follow-up](images/01_mql_follow_up.png)
+![4 in 10 marketing leads were never assigned to anyone](images/01_mql_follow_up.png)
 
-![Product-qualified accounts](images/02_unrouted_product_qualified.png)
+![Most busy self-serve teams have nobody from sales talking to them](images/02_unrouted_product_qualified.png)
 
 ## Scorecard
 

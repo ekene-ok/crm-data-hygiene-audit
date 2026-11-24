@@ -89,8 +89,8 @@ def chart_mql(df):
     total = counts.sum()
     fig, ax = brand.chart(height=4.0, label_in=1.6)
     brand.hbar(ax, [r[0] for r in rows], [r[1] for r in rows], {0}, lambda v: f"{v:,}", HIGHLIGHT)
-    brand.titles(fig, "Most late MQLs never had an owner to follow up",
-                 f"Follow-up status of {total} MQLs against a 24-hour SLA")
+    brand.titles(fig, "4 in 10 marketing leads were never assigned to anyone",
+                 f"Follow-up status of {total} marketing-qualified leads (MQLs), against a 24-hour target")
     brand.credit(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
     brand.save(fig, IMG / "01_mql_follow_up.png")
 
@@ -99,9 +99,10 @@ def chart_pql(extra):
     total, unrouted = extra["product_qualified_accounts"], extra["unrouted_pqls"]
     fig, ax = brand.chart(height=3.4, label_in=1.6)
     brand.hbar(ax, ["No sales owner", "Worked by sales"], [unrouted / total * 100, (total - unrouted) / total * 100],
-               {0}, lambda v: f"{v:.0f}%", HIGHLIGHT, xmax=100)
+               {0}, lambda v: f"{v:.0f}%", HIGHLIGHT, xmax=100,
+               sublabels=["and no open deal", "owner or open deal"])
     brand.titles(fig, "Most busy self-serve teams have nobody from sales talking to them",
-                 f"{total} product-qualified accounts: 6+ active users and 25+ recordings in 30 days")
+                 f"{total} busy self-serve accounts (6+ active users, 25+ recordings in 30 days), by sales coverage")
     brand.credit(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
     brand.save(fig, IMG / "02_unrouted_product_qualified.png")
 
