@@ -78,48 +78,32 @@ def scorecard(con):
     return sc, details, extra
 
 
-def style(ax):
-    for s in ax.spines.values():
-        s.set_visible(False)
-    ax.set_xticks([])
-    ax.tick_params(axis="y", length=0, labelsize=11, colors=INK)
-
-
 def chart_mql(df):
-    counts = df.follow_up_status.value_counts().sort_index()
-    labels = [s.split(". ")[1] for s in counts.index][::-1]
-    vals = counts.values[::-1]
-    total = vals.sum()
-    colors = [GREY if l.startswith("Contacted within") else (HIGHLIGHT if l.startswith("No owner") else GREY) for l in labels]
-    fig, ax = plt.subplots(figsize=(7.5, 3.8), dpi=150)
-    bars = ax.barh(labels, vals, color=colors, height=0.6)
-    for b, v in zip(bars, vals):
-        ax.text(v + total * 0.01, b.get_y() + b.get_height() / 2, f"{v}  ({100 * v / total:.0f}%)", va="center", fontsize=10.5, color=INK)
-    ax.set_xlim(0, max(vals) * 1.3)
-    style(ax)
-    fig.suptitle("Most late MQLs never had an owner to follow up", x=0.02, ha="left", fontsize=13, color=INK)
-    fig.text(0.02, 0.86, f"Follow-up status of {total} MQLs against a 24-hour SLA", fontsize=10, color=MUTED)
-    fig.tight_layout(rect=(0, 0.07, 1, 0.86))
-    brand.source(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
-    fig.savefig(IMG / "01_mql_follow_up.png", facecolor="white")
-    plt.close(fig)
+    counts = df.follow_up_status.value_counts()
+    short = {"No owner": "No owner", "Owner, never": "Owner, no contact", "Contacted after": "Contacted late",
+             "Contacted within": "Contacted on time"}
+    rows = []
+    for k, label in short.items():
+        n = sum(v for s_, v in counts.items() if s_.split(". ")[1].startswith(k))
+        rows.append((label, n))
+    total = counts.sum()
+    fig, ax = brand.chart(height=4.0, label_in=1.6)
+    brand.hbar(ax, [r[0] for r in rows], [r[1] for r in rows], {0}, lambda v: f"{v:,}", HIGHLIGHT)
+    brand.titles(fig, "Most late MQLs never had an owner to follow up",
+                 f"Follow-up status of {total} MQLs against a 24-hour SLA")
+    brand.credit(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
+    brand.save(fig, IMG / "01_mql_follow_up.png")
 
 
 def chart_pql(extra):
     total, unrouted = extra["product_qualified_accounts"], extra["unrouted_pqls"]
-    labels, vals = ["Being worked by sales", "No owner, no open deal"], [total - unrouted, unrouted]
-    fig, ax = plt.subplots(figsize=(7.5, 3.0), dpi=150)
-    bars = ax.barh(labels[::-1], vals[::-1], color=[HIGHLIGHT, GREY], height=0.55)
-    for b, v in zip(bars, vals[::-1]):
-        ax.text(v + total * 0.01, b.get_y() + b.get_height() / 2, f"{v}  ({100 * v / total:.0f}%)", va="center", fontsize=11, color=INK)
-    ax.set_xlim(0, max(vals) * 1.3)
-    style(ax)
-    fig.suptitle("Most busy self-serve teams have nobody from sales talking to them", x=0.02, ha="left", fontsize=13, color=INK)
-    fig.text(0.02, 0.82, f"{total} product-qualified accounts (6+ active users and 25+ recordings in 30 days)", fontsize=10, color=MUTED)
-    fig.tight_layout(rect=(0, 0.08, 1, 0.82))
-    brand.source(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
-    fig.savefig(IMG / "02_unrouted_product_qualified.png", facecolor="white")
-    plt.close(fig)
+    fig, ax = brand.chart(height=3.4, label_in=1.6)
+    brand.hbar(ax, ["No sales owner", "Worked by sales"], [unrouted / total * 100, (total - unrouted) / total * 100],
+               {0}, lambda v: f"{v:.0f}%", HIGHLIGHT, xmax=100)
+    brand.titles(fig, "Most busy self-serve teams have nobody from sales talking to them",
+                 f"{total} product-qualified accounts: 6+ active users and 25+ recordings in 30 days")
+    brand.credit(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
+    brand.save(fig, IMG / "02_unrouted_product_qualified.png")
 
 
 def main():
