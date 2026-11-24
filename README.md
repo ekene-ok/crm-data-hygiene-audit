@@ -27,6 +27,16 @@ The CRM's biggest problems are routing gaps, not dirty fields. **Most MQLs that 
 | 09 | Deals with no amount | 31 of 465 | 6.7% |
 | 10 | Product-qualified accounts with no sales owner | 93 of 139 | 66.9% |
 
+## What fixing it is worth
+
+| Problem | Size of the prize | Basis |
+|---|---|---|
+| 93 product-qualified accounts with no sales owner | **$84K to $251K a year** in new deals | Median Pro or Business deal ($18,000) x 5 to 15 extra points of conversion if sales works them (planning assumption) |
+| 102 stale open deals | **$2.48M** of the $5.42M forecast is unlikely to close as dated | Close date passed or no activity in 30 days |
+| 158 MQLs with no owner | 42.6% of MQLs get no follow-up at all | Every one is a lead the business already paid to create |
+
+The routing fixes come first because they are cheap (a few workflows) and sit closest to revenue. Source: [`results/pql_value_at_stake.csv`](results/pql_value_at_stake.csv), from [`sql/11_pql_value.sql`](sql/11_pql_value.sql)
+
 ## Recommendations
 
 1. **Fix routing first:** an MQL assignment workflow and a 24-hour SLA alert, so no lead waits without an owner

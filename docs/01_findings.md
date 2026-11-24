@@ -40,7 +40,7 @@ Only 31.5% of MQLs were contacted within the 24-hour SLA. The biggest cause is n
 - **93 of them (66.9%) have no company owner and no open deal**: 47 on the free plan, 31 on Creator and 15 on Pro
 - The median unrouted account has 15 active users, which is a team, not an individual creator
 
-For a product-led company, these are the warmest expansion leads in the database, and nothing in the CRM currently surfaces them.
+For a product-led company, these are the warmest expansion leads in the database, and nothing in the CRM currently surfaces them. At the median Pro or Business deal of $18,000, every 5 points of extra conversion from sales outreach is worth about $84,000 a year ([`results/pql_value_at_stake.csv`](../results/pql_value_at_stake.csv)).
 
 ## Finding 3: almost half the open pipeline is stale
 

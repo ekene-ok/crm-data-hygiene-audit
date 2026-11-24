@@ -9,10 +9,13 @@ import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).parent))
+import brand_style as brand
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA, SQL, RES, IMG = ROOT / "data", ROOT / "sql", ROOT / "results", ROOT / "images"
-HIGHLIGHT, GREY, INK, MUTED = "#0f7c90", "#c9c7c1", "#1a1a1a", "#6b6a66"
+HIGHLIGHT, GREY, INK, MUTED = brand.PROJECT["crm-data-hygiene-audit"], brand.CONTEXT, brand.INK, brand.MUTED
 
 CHECKS = [
     # file stem, area, label, denominator, what it breaks
@@ -66,6 +69,9 @@ def scorecard(con):
         "unrouted_pqls": len(details["10_unrouted_product_qualified"]),
     }
     pd.Series(extra).to_csv(RES / "headline_numbers.csv", header=["value"])
+    pql = con.execute((SQL / "11_pql_value.sql").read_text()).df()
+    pql.to_csv(RES / "pql_value_at_stake.csv", index=False)
+    print(pql.to_string(index=False))
     print(sc.drop(columns="what_it_breaks").to_string(index=False))
     print("\n", pd.Series(extra).to_string())
     print("\n", details["07_mql_follow_up"].follow_up_status.value_counts().sort_index().to_string())
@@ -91,9 +97,10 @@ def chart_mql(df):
         ax.text(v + total * 0.01, b.get_y() + b.get_height() / 2, f"{v}  ({100 * v / total:.0f}%)", va="center", fontsize=10.5, color=INK)
     ax.set_xlim(0, max(vals) * 1.3)
     style(ax)
-    fig.suptitle("Most late MQLs never had an owner to follow up", x=0.02, ha="left", fontsize=13, fontweight="bold", color=INK)
+    fig.suptitle("Most late MQLs never had an owner to follow up", x=0.02, ha="left", fontsize=13, color=INK)
     fig.text(0.02, 0.86, f"Follow-up status of {total} MQLs against a 24-hour SLA", fontsize=10, color=MUTED)
-    fig.tight_layout(rect=(0, 0, 1, 0.86))
+    fig.tight_layout(rect=(0, 0.07, 1, 0.86))
+    brand.source(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
     fig.savefig(IMG / "01_mql_follow_up.png", facecolor="white")
     plt.close(fig)
 
@@ -107,9 +114,10 @@ def chart_pql(extra):
         ax.text(v + total * 0.01, b.get_y() + b.get_height() / 2, f"{v}  ({100 * v / total:.0f}%)", va="center", fontsize=11, color=INK)
     ax.set_xlim(0, max(vals) * 1.3)
     style(ax)
-    fig.suptitle("Most busy self-serve teams have nobody from sales talking to them", x=0.02, ha="left", fontsize=13, fontweight="bold", color=INK)
+    fig.suptitle("Most busy self-serve teams have nobody from sales talking to them", x=0.02, ha="left", fontsize=13, color=INK)
     fig.text(0.02, 0.82, f"{total} product-qualified accounts (6+ active users and 25+ recordings in 30 days)", fontsize=10, color=MUTED)
-    fig.tight_layout(rect=(0, 0, 1, 0.82))
+    fig.tight_layout(rect=(0, 0.08, 1, 0.82))
+    brand.source(fig, "Synthetic HubSpot-style CRM export, 20 Nov 2026 snapshot")
     fig.savefig(IMG / "02_unrouted_product_qualified.png", facecolor="white")
     plt.close(fig)
 
