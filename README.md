@@ -1,16 +1,40 @@
 # CRM Data Hygiene Audit: Ferncast
 
-A HubSpot-style CRM audit for a product-led SaaS company: ten SQL checks for duplicates, associations, lifecycle stages, ownership, lead routing and pipeline health, with a prioritized cleanup plan and proposed HubSpot workflows to keep the data clean.
+**In one line:** the biggest problem in this customer database wasn't messy data, it was leads and accounts that nobody in sales was assigned to.
 
-> Ferncast is a fictional video and podcast recording platform with a self-serve product and a sales team for larger accounts. The CRM export is synthetic, with known problems planted at set rates. No real HubSpot account or customer data is used.
+A CRM is the system sales and marketing use to track contacts, companies and deals. When it's unreliable, leads get missed and forecasts are wrong. I audited a made-up CRM export for Ferncast, a fictional video and podcast recording app, with ten checks for common problems, then wrote a cleanup plan.
+
+## What I found
+
+- **Most leads that weren't followed up within a day had never been assigned to anyone.** 69% of marketing leads missed the 24-hour follow-up
+- **Two thirds of the busiest self-serve customer teams had nobody in sales talking to them.** That's a missed $84K to $251K a year in new deals
+- **Almost half the open sales forecast was stale:** $2.48M of $5.42M had a passed close date or no activity in 30 days
+- **Duplicates and missing fields exist but are smaller problems** (under 9% each)
+
+![4 in 10 marketing leads were never assigned to anyone](images/01_mql_follow_up.png)
+
+**How to read it:** each bar counts marketing leads by what happened to them. The biggest group (158 of 371) was never assigned to anyone.
+
+![Most busy self-serve teams have nobody from sales talking to them](images/02_unrouted_product_qualified.png)
+
+## What I'd do
+
+1. Fix lead routing first, so every lead and active account gets an owner automatically
+2. Clean up stale deals so the forecast reflects reality
+3. Then tackle duplicates and missing fields, with simple automated rules to keep them from coming back
+
+## Words used here
+
+- **CRM:** the database sales and marketing teams use (HubSpot here)
+- **MQL (marketing qualified lead):** a lead marketing thinks is ready for sales
+- **Product-qualified account:** a customer team using the free or self-serve product heavily enough that sales should reach out
+
+<details>
+<summary><b>The full analysis: method, detail and how to run it</b> (for technical readers)</summary>
 
 ## The result
 
 The CRM's biggest problems are routing gaps, not dirty fields. **Most MQLs that missed the 24-hour follow-up SLA were never assigned to anyone**, and **two thirds of the busiest self-serve teams have nobody in sales talking to them**. Meanwhile, 46% of open pipeline is stale, so the forecast is overstated.
-
-![4 in 10 marketing leads were never assigned to anyone](images/01_mql_follow_up.png)
-
-![Most busy self-serve teams have nobody from sales talking to them](images/02_unrouted_product_qualified.png)
 
 ## Scorecard
 
@@ -74,3 +98,5 @@ python src/run_analysis.py    # runs every check, writes results/ and images/
 ## Skills shown
 
 CRM data quality, HubSpot data model and workflow design, lead routing and SLA design, product-led growth (PQL) operations, pipeline hygiene, SQL (DuckDB), Python, and process documentation.
+
+</details>
